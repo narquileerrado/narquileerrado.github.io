@@ -665,54 +665,27 @@ const tickerMsg = "// FILE: AGUIRRE_L — CLASSIFICATION: CULTURAL OPERATIVE —
   "Self-taught by necessity, science-enthusiast by temperament, observer by habit.   " +
   "STATUS: ACTIVE  |  LOCATION: Buenos Aires          ";
 
-const tickerEl = document.getElementById('tickerText');
-let tickerPos = 0;
-let tickerBuffer = '';
-const BASE_DELAY = 20;   // ms per character — "modem" speed
+// ==================== TICKER SUAVE Y CONSTANTE ====================
 
-function typeNextChar() {
-  if (tickerPos >= tickerMsg.length) {
-    // restart after a short pause
-    setTimeout(() => {
-      tickerBuffer = '';
-      tickerEl.textContent = '';
-      tickerPos = 0;
-      typeNextChar();
-    }, 1800);
-    return;
-  }
+const ticker = document.getElementById('ticker'); // cambia el ID si el tuyo es diferente
+let position = 0;
+const speed = 1.2; // velocidad del movimiento (ajusta este valor: más alto = más rápido)
 
-  // occasional "glitch": random char flashes before the real one
-  const ch = tickerMsg[tickerPos];
-  const glitchCharsT = '!@#$%*?░▒▓';
-  if (Math.random() < 0.06) {
-    const fake = glitchCharsT[Math.floor(Math.random() * glitchCharsT.length)];
-    tickerEl.textContent = tickerBuffer + fake;
-    setTimeout(() => {
-      tickerBuffer += ch;
-      tickerEl.textContent = tickerBuffer;
-      // keep only last ~120 chars visible so it scrolls
-      if (tickerBuffer.length > 120) {
-        tickerBuffer = tickerBuffer.slice(tickerBuffer.length - 120);
-      }
-      tickerPos++;
-      setTimeout(typeNextChar, BASE_DELAY + Math.random() * 40);
-    }, 80);
-  } else {
-    tickerBuffer += ch;
-    if (tickerBuffer.length > 120) {
-      tickerBuffer = tickerBuffer.slice(tickerBuffer.length - 120);
+function animateTicker() {
+    position -= speed;
+    
+    // Si el contenido ya se salió completamente por la izquierda, lo volvemos al inicio
+    if (position <= -ticker.scrollWidth / 2) {
+        position = 0;
     }
-    tickerEl.textContent = tickerBuffer;
-    tickerPos++;
-    const delay = ch === ' ' ? BASE_DELAY * 0.6 :
-                  '.,—|/'.includes(ch) ? BASE_DELAY * 3 :
-                  BASE_DELAY + Math.random() * 35;
-    setTimeout(typeNextChar, delay);
-  }
+    
+    ticker.style.transform = `translateX(${position}px)`;
+    
+    requestAnimationFrame(animateTicker);
 }
 
-setTimeout(typeNextChar, 800);
+// Iniciar la animación
+animateTicker();
 
 </script>
 </body>

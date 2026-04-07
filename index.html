@@ -652,7 +652,7 @@ function tick() { document.getElementById('clk').textContent = new Date().toTime
 tick(); setInterval(tick, 1000);
 
 // ── Fake ping ──
-function pingUpdate() {  document.getElementById('ping').textContent = 12 + Math.floor(Math.random() * 4); }
+function pingUpdate() {  document.getElementById('ping').textContent = 12 + Math.floor(Math.random() * 15); }
 pingUpdate(); setInterval(pingUpdate, 2500);
 
 // ── Ticker (modem typewriter + scroll) ──
@@ -668,7 +668,7 @@ const tickerMsg = "// FILE: AGUIRRE_L — CLASSIFICATION: CULTURAL OPERATIVE —
 const tickerEl = document.getElementById('tickerText');
 let tickerPos = 0;
 let tickerBuffer = '';
-const BASE_DELAY = 5;   // ms per character — "modem" speed
+const BASE_DELAY = 20;   // ms per character — "modem" speed
 
 function typeNextChar() {
   if (tickerPos >= tickerMsg.length) {

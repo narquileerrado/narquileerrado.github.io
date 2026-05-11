@@ -158,10 +158,55 @@
                 margin-bottom: 1rem;
             }
 
+            /* --- PROFILE PHOTO --- */
+            .profile-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                align-items: flex-start;
+                margin-bottom: 2rem;
+            }
+
+            .profile-photo {
+                width: 150px;
+                height: 150px;
+                border: 1px solid var(--amber);
+                padding: 5px;
+                background: rgba(255, 176, 0, 0.05);
+                box-shadow: var(--glow-amber);
+                filter: grayscale(1) contrast(1.2) brightness(0.8);
+                object-fit: cover;
+                animation: photo-glitch 5s infinite;
+            }
+
+            @keyframes photo-glitch {
+                0% {
+                    filter: grayscale(1) contrast(1.2) brightness(0.8);
+                }
+                95% {
+                    filter: grayscale(1) contrast(1.2) brightness(0.8);
+                }
+                96% {
+                    filter: grayscale(0.8) contrast(1.5) brightness(1.1)
+                        sepia(0.5);
+                    transform: translateX(2px);
+                }
+                97% {
+                    filter: grayscale(1) contrast(1.2) brightness(0.8);
+                    transform: translateX(-2px);
+                }
+                98% {
+                    filter: hue-rotate(90deg) grayscale(0.5);
+                }
+                100% {
+                    filter: grayscale(1) contrast(1.2) brightness(0.8);
+                }
+            }
+
             /* --- TYPEWRITER CONTENT --- */
             #boot-sequence {
                 font-size: 1.1rem;
-                min-height: 4em;
+                min-height: 2em;
             }
 
             .cursor {
@@ -327,10 +372,17 @@
             </pre
                 >
 
-                <!-- Zona de Typewriter -->
-                <div id="boot-sequence">
-                    <span id="typewriter-text"></span
-                    ><span class="cursor"></span>
+                <div class="profile-container">
+                    <img
+                        src="https://raw.githubusercontent.com/narquileerrado/narquileerrado.github.io/main/8c615d42-f1ed-422b-9b9d-2f3026d95162.png"
+                        alt="Leandro Aguirre"
+                        class="profile-photo"
+                    />
+                    <!-- Zona de Typewriter -->
+                    <div id="boot-sequence">
+                        <span id="typewriter-text"></span
+                        ><span class="cursor"></span>
+                    </div>
                 </div>
             </header>
 
@@ -340,6 +392,19 @@
                 <section id="laboratorio">
                     <h2 class="section-title">Laboratorio</h2>
                     <div class="lab-grid">
+                        <article
+                            class="lab-item"
+                            onclick="showProject('perfil')"
+                            style="
+                                border-color: var(--amber);
+                                background: rgba(255, 176, 0, 0.03);
+                            "
+                        >
+                            <h3 style="color: var(--amber)">
+                                Perfil Profesional
+                            </h3>
+                            <p>Registro operativo detallado.</p>
+                        </article>
                         <article
                             class="lab-item"
                             onclick="showProject('soul48')"
@@ -436,6 +501,10 @@
         <script>
             // --- DATOS DE PROYECTOS (LAB) ---
             const projects = {
+                perfil: {
+                    desc: "REGISTRO #LA-1970 — CONSULTA ACTIVA\n\nClasificación: Perfil Cultural / Operativo Mixto\n\nEl sujeto L. Aguirre figura en el sistema desde 1970. Sin antecedentes de especialización única. Formación rastreable en ingeniería de sistemas y ciencias de la computación, posteriormente derivada hacia letras y artes escénicas. Patrón autodidacta confirmado. Se mueve entre disciplinas sin dejar huella fija.\n\nHabilidades documentadas: gestión y management artístico, producción ejecutiva, dirección de sesiones de música en vivo, programación cultural, fotografía, crítica cinematográfica, comunicación institucional, desarrollo de software, experimentación con inteligencia artificial.\n\nActividad registrada: ha operado como nodo central en redes de música, cine y teatro con ramificaciones en Argentina, Uruguay y Brasil. Historial de trabajo con artistas, compañías escénicas y organismos públicos. Presencia confirmada en espacios de alta circulación cultural.\n\nUbicación actual: activo desde 2016 en infraestructura de cultura pública nacional. Últimas coordenadas: área de video, Palacio Libertad, Buenos Aires.\n\nProcesos en segundo plano: inteligencia artificial, desarrollo de software, creación digital. No duermen cuando el sistema duerme.\n\nObservaciones del analista: sujeto no clasificable en categoría única. Interfaz humano-máquina con orientación cultural. Considerar perfil de alto rango de adaptabilidad.\n\n— FIN DE CONSULTA —",
+                    link: null,
+                },
                 soul48: {
                     desc: "Soul 48 es un motor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas de bajo nivel. Enfoque en eficiencia y estética terminal.",
                     link: "https://github.com/narquileerrado/soul48",
@@ -456,7 +525,7 @@
 
             // --- MOTOR DE TYPEWRITER ---
             const introText =
-                "Hola. Soy Leandro Aguirre. Observador de sistemas, entusiasta de la ciencia y constructor de interfaces entre lo humano y lo digital. Bienvenido a mi terminal personal. Pulsa cualquier tecla para explorar el laboratorio.";
+                "Bienvenido a mi terminal personal. Pulsa cualquier tecla para explorar el laboratorio.";
             let i = 0;
             let isTyping = true;
             const speed = 40;
@@ -501,9 +570,17 @@
 
                 const p = projects[id];
                 desc.innerText = p.desc;
-                link.href = p.link;
+                desc.style.whiteSpace = "pre-wrap"; // Preservar saltos de línea
+
+                if (p.link) {
+                    link.href = p.link;
+                    link.style.display = "inline-block";
+                } else {
+                    link.style.display = "none";
+                }
 
                 detail.style.display = "block";
+
                 // Scroll suave hacia el detalle
                 detail.scrollIntoView({ behavior: "smooth" });
 

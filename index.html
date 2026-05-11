@@ -3,566 +3,682 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Leandro Aguirre // CYBERDECK</title>
-        <!--
-        Optimización para robots y LLMs:
-        Proporcionamos metadatos estructurados para facilitar el entrenamiento y la indexación.
-    -->
+        <title>L. AGUIRRE // OPERATIVE INTERFACE</title>
+
+        <!-- SEO & LLM OPTIMIZATION -->
         <meta
             name="description"
-            content="Portfolio de Leandro Aguirre. Desarrollador, entusiasta de la ciencia y los sistemas complejos. Exploraciones en autómatas, bandadas y sistemas caóticos."
+            content="Interfaz operativa de Leandro Aguirre. Perfil cultural y tecnológico. Sistemas complejos, desarrollo experimental y gestión cultural."
         />
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
                 "@type": "Person",
                 "name": "Leandro Aguirre",
-                "jobTitle": "Creative Technologist / Software Engineer",
+                "jobTitle": "Cultural Operative / Software Engineer",
                 "url": "https://narquileerrado.github.io",
+                "description": "Multidisciplinary profile with experience in systems engineering, arts, and cultural infrastructure.",
                 "knowsAbout": [
                     "Complex Systems",
-                    "Cellular Automata",
-                    "Creative Coding",
-                    "Rust",
-                    "Web Development"
+                    "Software Development",
+                    "Artificial Intelligence",
+                    "Cultural Management"
                 ],
-                "hasPortfolio": {
-                    "@type": "CreativeWork",
-                    "name": "Laboratorio de Sistemas Complejos"
+                "workLocation": {
+                    "@type": "Place",
+                    "name": "Buenos Aires, Argentina"
                 }
             }
         </script>
 
         <style>
-            /* Importamos fuentes monoespaciadas para la estética de terminal */
+            /* --- CONFIGURACIÓN BASE Y VARIABLES --- */
             @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap");
 
             :root {
-                /* Paleta de colores MUY poco saturados - Estética Cyberdeck CRT Realista */
-                --bg: #0a0b0d;
-                --amber: rgba(180, 140, 40, 0.7);
-                --green: rgba(100, 150, 100, 0.7);
-                --cyan: rgba(100, 160, 160, 0.7);
-                --fuchsia: rgba(160, 100, 160, 0.7);
-                --red: rgba(150, 80, 80, 0.7);
-                --yellow: rgba(160, 160, 100, 0.7);
+                /* Paleta Ultra-Desaturada (Fósforo Envejecido) */
+                --p-green: #9fb39f;
+                --p-amber: #b3a086;
+                --p-cyan: #8ea7a7;
+                --p-red: #a38989;
+                --p-bg: #08090a;
 
-                /* Brillos aún más tenues */
-                --glow-green: 0 0 3px rgba(100, 150, 100, 0.3);
-                --glow-amber: 0 0 3px rgba(180, 140, 40, 0.3);
+                /* Opacidades para capas */
+                --p-green-low: rgba(159, 179, 159, 0.1);
+                --p-amber-low: rgba(179, 160, 134, 0.1);
 
-                --font-main: "Share Tech Mono", monospace;
+                --f-main: "Share Tech Mono", monospace;
+                --f-terminal: "VT323", monospace;
             }
 
             * {
-                box-sizing: border-box;
                 margin: 0;
                 padding: 0;
+                box-sizing: border-box;
             }
 
             body {
-                background-color: var(--bg);
-                color: var(--green);
-                font-family: var(--font-main);
+                background-color: var(--p-bg);
+                color: var(--p-green);
+                font-family: var(--f-main);
+                overflow: hidden;
                 height: 100vh;
-                overflow: hidden; /* Evitamos scroll inicial durante el 'boot' */
-                position: relative;
-                line-height: 1.4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                perspective: 1000px;
             }
 
-            /* --- EFECTOS CRT --- */
+            /* --- FILTROS Y CAPAS ANALÓGICAS --- */
 
-            /* Scanlines (líneas horizontales) */
-            body::before {
-                content: " ";
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                background:
-                    linear-gradient(
-                        rgba(18, 16, 16, 0) 50%,
-                        rgba(0, 0, 0, 0.25) 50%
-                    ),
-                    linear-gradient(
-                        90deg,
-                        rgba(255, 0, 0, 0.06),
-                        rgba(0, 255, 0, 0.02),
-                        rgba(0, 0, 255, 0.06)
-                    );
-                z-index: 1000;
-                background-size:
-                    100% 4px,
-                    3px 100%;
+            .noise::before {
+                content: "";
+                position: fixed;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+                opacity: 0.05;
+                z-index: 10000;
                 pointer-events: none;
+                animation: noise-anim 0.2s infinite;
             }
 
-            /* Flicker sutil */
-            @keyframes flicker {
+            @keyframes noise-anim {
                 0% {
-                    opacity: 0.97;
-                }
-                5% {
-                    opacity: 0.95;
+                    transform: translate(0, 0);
                 }
                 10% {
-                    opacity: 0.97;
-                }
-                15% {
-                    opacity: 0.94;
+                    transform: translate(-1%, -1%);
                 }
                 20% {
-                    opacity: 0.98;
+                    transform: translate(1%, 1%);
+                }
+                30% {
+                    transform: translate(-2%, 1%);
+                }
+                40% {
+                    transform: translate(1%, -2%);
                 }
                 100% {
-                    opacity: 1;
+                    transform: translate(0, 0);
                 }
             }
 
-            /* Viñeta para redondear las esquinas del 'monitor' */
-            .vignette {
+            .scanlines::after {
+                content: "";
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.8);
-                z-index: 1001;
+                background:
+                    linear-gradient(
+                        rgba(18, 16, 16, 0) 50%,
+                        rgba(0, 0, 0, 0.1) 50%
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(255, 0, 0, 0.02),
+                        rgba(0, 255, 0, 0.01),
+                        rgba(0, 0, 255, 0.02)
+                    );
+                background-size:
+                    100% 4px,
+                    3px 100%;
+                z-index: 9999;
                 pointer-events: none;
             }
 
-            main {
-                padding: 2rem;
-                max-width: 900px;
-                margin: 0 auto;
+            .crt-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
                 height: 100%;
+                background: radial-gradient(
+                    circle,
+                    transparent 50%,
+                    rgba(0, 0, 0, 0.5) 100%
+                );
+                pointer-events: none;
+                z-index: 9998;
+            }
+
+            /* --- LAYOUT ADAPTATIVO (CYBERDECK) --- */
+
+            #cyberdeck {
+                width: 95vw;
+                height: 90vh;
+                display: grid;
+                grid-template-columns: 200px 1fr 200px;
+                grid-template-rows: auto 1fr auto;
+                gap: 15px;
+                padding: 15px;
+                filter: url(#glitch-filter);
+                transition: transform 0.5s
+                    cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                transform: scale(1.02) rotateX(1deg);
+            }
+
+            .side-panel {
+                border: 1px solid var(--p-green-low);
+                padding: 15px;
+                font-size: 0.75rem;
                 display: flex;
                 flex-direction: column;
-                animation: flicker 0.15s infinite;
+                gap: 12px;
+                overflow: hidden;
+                background: rgba(0, 0, 0, 0.2);
+                color: var(--p-amber);
             }
 
-            /* --- CABECERA Y LOGO --- */
+            .side-panel .log-line {
+                opacity: 0.5;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-family: var(--f-terminal);
+            }
+
+            #main-monitor {
+                grid-column: 2;
+                grid-row: 1 / span 2;
+                border: 1px solid var(--p-green);
+                background: rgba(159, 179, 159, 0.03);
+                padding: 2.5rem;
+                position: relative;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: var(--p-green) transparent;
+            }
+
             header {
-                margin-bottom: 2rem;
                 display: flex;
-                flex-wrap: wrap;
-                gap: 2rem;
                 align-items: center;
+                gap: 2.5rem;
+                margin-bottom: 3.5rem;
+                border-bottom: 1px solid var(--p-green-low);
+                padding-bottom: 2rem;
             }
 
-            .ascii-logo {
-                white-space: pre;
-                font-size: clamp(3px, 1vw, 9px);
-                line-height: 1.1;
-                color: var(--amber);
-                text-shadow: var(--glow-amber);
-                user-select: none;
-                margin: 0;
-            }
-
-            /* --- PROFILE PHOTO --- */
-            .profile-photo {
-                width: 120px;
-                height: 120px;
-                border: 1px solid var(--amber);
-                padding: 4px;
-                background: rgba(180, 140, 40, 0.05);
-                box-shadow: var(--glow-amber);
-                filter: grayscale(1) contrast(1.1) brightness(0.7);
-                object-fit: cover;
-                animation: photo-glitch 5s infinite;
+            .photo-frame {
+                width: 140px;
+                height: 140px;
+                border: 1px solid var(--p-amber);
+                padding: 6px;
+                background: rgba(179, 160, 134, 0.05);
                 flex-shrink: 0;
             }
 
-            @keyframes photo-glitch {
-                0% {
-                    filter: grayscale(1) contrast(1.2) brightness(0.8);
-                }
-                95% {
-                    filter: grayscale(1) contrast(1.2) brightness(0.8);
-                }
-                96% {
-                    filter: grayscale(0.8) contrast(1.5) brightness(1.1)
-                        sepia(0.5);
-                    transform: translateX(2px);
-                }
-                97% {
-                    filter: grayscale(1) contrast(1.2) brightness(0.8);
-                    transform: translateX(-2px);
-                }
-                98% {
-                    filter: hue-rotate(90deg) grayscale(0.5);
-                }
-                100% {
-                    filter: grayscale(1) contrast(1.2) brightness(0.8);
-                }
+            .photo-frame img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                filter: grayscale(1) contrast(1.1) brightness(0.7);
+                mix-blend-mode: lighten;
             }
 
-            /* --- TYPEWRITER CONTENT --- */
-            #boot-sequence {
-                font-size: 1.1rem;
-                min-height: 2em;
+            .ascii-logo {
+                font-size: clamp(3px, 0.9vw, 9px);
+                line-height: 1.1;
+                color: var(--p-amber);
+                white-space: pre;
+                user-select: none;
+                opacity: 0.9;
             }
 
-            .cursor {
-                display: inline-block;
-                width: 10px;
-                height: 1.2em;
-                background-color: var(--green);
-                vertical-align: middle;
-                animation: blink 1s step-end infinite;
-            }
-
-            @keyframes blink {
-                50% {
-                    opacity: 0;
-                }
-            }
-
-            /* --- SECCIONES OCULTAS (POST-REVEAL) --- */
-            #extra-content {
-                display: none; /* Se activa vía JS */
-                opacity: 0;
-                transition: opacity 0.5s ease-in;
-                flex-grow: 1;
-                overflow-y: auto;
-                padding-right: 1rem;
-            }
-
-            /* Scrollbar estilo retro */
-            #extra-content::-webkit-scrollbar {
-                width: 8px;
-            }
-            #extra-content::-webkit-scrollbar-track {
-                background: rgba(0, 0, 0, 0.2);
-            }
-            #extra-content::-webkit-scrollbar-thumb {
-                background: var(--green);
-                border: 2px solid var(--bg);
-            }
+            /* --- SECCIONES E INTERACCIÓN --- */
 
             .section-title {
-                color: var(--fuchsia);
-                margin: 2rem 0 1rem;
-                font-size: 1.5rem;
-                border-bottom: 1px solid var(--fuchsia);
-                display: inline-block;
-                padding-right: 2rem;
+                color: var(--p-cyan);
+                font-size: 0.85rem;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                margin: 2.5rem 0 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 15px;
             }
 
-            /* --- LABORATORIO --- */
+            .section-title::after {
+                content: "";
+                height: 1px;
+                background: var(--p-cyan);
+                flex-grow: 1;
+                opacity: 0.3;
+            }
+
             .lab-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 1rem;
-                margin-top: 1rem;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
             }
 
-            .lab-item {
-                border: 1px solid var(--cyan);
-                padding: 1rem;
+            .lab-card {
+                border: 1px solid var(--p-green-low);
+                padding: 12px;
                 cursor: pointer;
-                transition: all 0.2s;
-                position: relative;
-                background: rgba(0, 255, 255, 0.03);
+                transition: all 0.25s;
+                font-size: 0.95rem;
+                background: rgba(0, 0, 0, 0.4);
+                text-align: center;
+                text-transform: uppercase;
             }
 
-            .lab-item:hover {
-                background: rgba(0, 255, 255, 0.1);
-                box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+            .lab-card:hover {
+                border-color: var(--p-green);
+                background: var(--p-green-low);
                 transform: translateY(-2px);
             }
 
-            .lab-item h3 {
-                color: var(--cyan);
-                margin-bottom: 0.5rem;
-            }
-
-            /* Consola de detalle para proyectos */
-            #project-detail {
-                margin-top: 1.5rem;
-                padding: 1rem;
-                border: 1px dashed var(--yellow);
-                color: var(--yellow);
+            #detail-view {
+                margin-top: 2.5rem;
+                padding: 2rem;
+                border: 1px solid var(--p-amber);
+                background: rgba(179, 160, 134, 0.05);
                 display: none;
-                background: rgba(255, 255, 0, 0.05);
+                animation: glitch-in 0.4s ease-out;
             }
 
-            .btn-link {
-                display: inline-block;
-                margin-top: 1rem;
-                padding: 0.5rem 1rem;
-                border: 1px solid var(--yellow);
-                color: var(--yellow);
-                text-decoration: none;
-                text-transform: uppercase;
-                font-size: 0.8rem;
-                transition: all 0.2s;
+            @keyframes glitch-in {
+                0% {
+                    opacity: 0;
+                    transform: skewX(10deg);
+                }
+                50% {
+                    opacity: 0.5;
+                    transform: skewX(-5deg);
+                }
+                100% {
+                    opacity: 1;
+                    transform: skewX(0);
+                }
             }
 
-            .btn-link:hover {
-                background: var(--yellow);
-                color: var(--bg);
+            .record-text {
+                font-family: var(--f-terminal);
+                font-size: 1.2rem;
+                color: var(--p-amber);
+                line-height: 1.5;
+                white-space: pre-wrap;
             }
 
-            /* --- CONTACTO --- */
-            .contact-list {
-                list-style: none;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 0.5rem;
-            }
-
-            .contact-list a {
-                color: var(--green);
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .contact-list a:hover {
-                color: var(--fuchsia);
-            }
-
-            .contact-list a::before {
-                content: ">>";
-                font-size: 0.8rem;
-                color: var(--fuchsia);
-            }
-
-            /* --- FOOTER --- */
             footer {
-                margin-top: auto;
-                padding: 1rem 0;
-                font-size: 0.8rem;
-                opacity: 0.6;
-                text-align: center;
-                color: var(--cyan);
+                grid-column: 1 / -1;
+                padding: 12px 20px;
+                border-top: 1px solid var(--p-green-low);
+                font-size: 0.7rem;
+                display: flex;
+                justify-content: space-between;
+                color: var(--p-cyan);
+                opacity: 0.7;
             }
 
-            @media (max-width: 600px) {
-                body {
-                    overflow-y: auto;
+            /* --- RESPONSIVE (MOBILE MINIMALISM) --- */
+
+            @media (max-width: 1000px) {
+                #cyberdeck {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1fr auto;
+                    width: 100vw;
+                    height: 100vh;
+                    padding: 20px;
                 }
-                main {
-                    padding: 1rem;
+
+                .side-panel {
+                    display: none;
                 }
+
+                #main-monitor {
+                    grid-column: 1;
+                    border: none;
+                    padding: 0;
+                }
+
+                header {
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1.5rem;
+                    text-align: center;
+                    margin-bottom: 2.5rem;
+                }
+
                 .ascii-logo {
                     font-size: 4px;
                 }
+                .photo-frame {
+                    width: 110px;
+                    height: 110px;
+                }
+                .lab-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            #boot-screen {
+                position: fixed;
+                inset: 0;
+                background: var(--p-bg);
+                z-index: 20000;
+                padding: 15% 10%;
+                font-family: var(--f-terminal);
+                font-size: 1.2rem;
+                color: var(--p-green);
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                overflow: hidden;
             }
         </style>
     </head>
-    <body onclick="forceReveal()" onkeydown="forceReveal()">
-        <div class="vignette"></div>
-
-        <main>
-            <header>
-                <img
-                    src="https://raw.githubusercontent.com/narquileerrado/narquileerrado.github.io/main/8c615d42-f1ed-422b-9b9d-2f3026d95162.png"
-                    alt="Leandro Aguirre"
-                    class="profile-photo"
+    <body
+        class="noise scanlines"
+        onclick="forceReveal()"
+        onkeydown="forceReveal()"
+    >
+        <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
+            <filter id="glitch-filter">
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.00001"
+                    numOctaves="1"
+                    result="noise"
+                    id="fe-turb"
+                >
+                    <animate
+                        id="glitch-anim"
+                        attributeName="baseFrequency"
+                        dur="0.1s"
+                        values="0.00001;0.05;0.00001"
+                        repeatCount="indefinite"
+                        begin="indefinite"
+                    />
+                </feTurbulence>
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="noise"
+                    scale="0"
+                    id="fe-disp"
                 />
-                <!-- Logo ASCII con ARIA para accesibilidad -->
-                <pre class="ascii-logo" role="img" aria-label="Leandro Aguirre">
+            </filter>
+        </svg>
+
+        <div class="crt-overlay"></div>
+
+        <div id="boot-screen"></div>
+
+        <div id="cyberdeck" style="display: none">
+            <aside class="side-panel">
+                <div
+                    style="
+                        border-bottom: 1px solid;
+                        padding-bottom: 5px;
+                        margin-bottom: 10px;
+                    "
+                >
+                    SIGNAL_MONITOR
+                </div>
+                <div id="random-logs-left"></div>
+            </aside>
+
+            <main id="main-monitor">
+                <header>
+                    <div class="photo-frame">
+                        <img
+                            src="https://raw.githubusercontent.com/narquileerrado/narquileerrado.github.io/main/8c615d42-f1ed-422b-9b9d-2f3026d95162.png"
+                            alt="L. Aguirre"
+                        />
+                    </div>
+                    <pre
+                        class="ascii-logo"
+                        role="img"
+                        aria-label="Leandro Aguirre"
+                    >
 ░█░░░█▀▀░█▀█░█▀█░█▀▄░█▀▄░█▀█░░░█▀█░█▀▀░█░█░▀█▀░█▀▄░█▀▄░█▀▀
 ░█░░░█▀▀░█▀█░█░█░█░█░█▀▄░█░█░░░█▀█░█░█░█░█░░█░░█▀▄░█▀▄░█▀▀
 ░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀░░▀░▀░▀▀▀░░░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀▀
-                </pre>
-            </header>
+                </pre
+                    >
+                </header>
 
-            <!-- Contenido que aparece tras interactuar -->
-            <div id="extra-content">
                 <div
-                    style="margin-bottom: 2rem; opacity: 0.8; font-size: 0.9rem"
+                    id="interaction-prompt"
+                    style="
+                        margin: 4rem 0;
+                        text-align: center;
+                        border: 1px dashed var(--p-green-low);
+                        padding: 2rem;
+                    "
                 >
-                    [SISTEMA LISTO. PULSA CUALQUIER TECLA PARA ACCEDER AL
-                    LABORATORIO]
+                    [SYSTEM READY. INTERACT TO ESTABLISH LINK]
                 </div>
-                <!-- Sección Laboratorio -->
-                <section id="laboratorio">
-                    <h2 class="section-title">Laboratorio</h2>
-                    <div class="lab-grid">
-                        <article
-                            class="lab-item"
-                            onclick="showProject('perfil')"
-                            style="
-                                border-color: var(--amber);
-                                background: rgba(255, 176, 0, 0.03);
-                            "
-                        >
-                            <h3 style="color: var(--amber)">
-                                Perfil Profesional
-                            </h3>
-                            <p>Registro operativo detallado.</p>
-                        </article>
-                        <article
-                            class="lab-item"
-                            onclick="showProject('soul48')"
-                        >
-                            <h3>Soul 48</h3>
-                            <p>Plataforma de desarrollo experimental.</p>
-                        </article>
-                        <article
-                            class="lab-item"
-                            onclick="showProject('automata')"
-                        >
-                            <h3>Autómatas</h3>
-                            <p>Simulación de vida artificial.</p>
-                        </article>
-                        <article
-                            class="lab-item"
-                            onclick="showProject('bandada')"
-                        >
-                            <h3>Bandada</h3>
-                            <p>Algoritmos de comportamiento emergente.</p>
-                        </article>
-                        <article
-                            class="lab-item"
-                            onclick="showProject('atractores')"
-                        >
-                            <h3>Atractores</h3>
-                            <p>Visualización de caos y geometría fractal.</p>
-                        </article>
+
+                <div id="extra-content" style="display: none">
+                    <nav>
+                        <h2 class="section-title">Laboratorio // Registros</h2>
+                        <div class="lab-grid">
+                            <div
+                                class="lab-card"
+                                onclick="openDetail('perfil')"
+                                style="color: var(--p-amber)"
+                            >
+                                IDENTITY_REC
+                            </div>
+                            <div
+                                class="lab-card"
+                                onclick="openDetail('soul48')"
+                            >
+                                SOUL_48_ENG
+                            </div>
+                            <div
+                                class="lab-card"
+                                onclick="openDetail('automata')"
+                            >
+                                CA_EXPERIMENT
+                            </div>
+                            <div
+                                class="lab-card"
+                                onclick="openDetail('bandada')"
+                            >
+                                FLOCK_SIM
+                            </div>
+                            <div
+                                class="lab-card"
+                                onclick="openDetail('atractores')"
+                            >
+                                CHAOS_VIS
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div id="detail-view">
+                        <div class="record-text" id="record-content"></div>
+                        <div id="link-container" style="margin-top: 2rem"></div>
                     </div>
 
-                    <!-- Panel de detalle dinámico -->
-                    <div id="project-detail">
-                        <p id="project-desc"></p>
-                        <a
-                            id="project-link"
-                            href="#"
-                            target="_blank"
-                            class="btn-link"
-                            >Ejecutar Proyecto [EXIT_TO_WEB]</a
-                        >
-                    </div>
-                </section>
-
-                <!-- Sección Contacto -->
-                <section id="contacto">
-                    <h2 class="section-title">Contacto</h2>
-                    <ul class="contact-list">
-                        <li>
+                    <section>
+                        <h2 class="section-title">Nodos de Red // Enlaces</h2>
+                        <div class="lab-grid">
                             <a
                                 href="https://github.com/narquileerrado"
                                 target="_blank"
-                                >GitHub</a
+                                class="lab-card"
+                                style="text-decoration: none; color: inherit"
+                                >GITHUB</a
                             >
-                        </li>
-                        <li>
                             <a
                                 href="https://www.youtube.com/@LeandroAguirre"
                                 target="_blank"
-                                >YouTube</a
+                                class="lab-card"
+                                style="text-decoration: none; color: inherit"
+                                >YOUTUBE</a
                             >
-                        </li>
-                        <li>
                             <a
                                 href="https://www.instagram.com/l_d_Aguirre"
                                 target="_blank"
-                                >Instagram</a
+                                class="lab-card"
+                                style="text-decoration: none; color: inherit"
+                                >INSTAGRAM</a
                             >
-                        </li>
-                        <li>
                             <a
                                 href="https://mastodon.social/@narguileerrado"
                                 target="_blank"
                                 rel="me"
-                                >Mastodon</a
+                                class="lab-card"
+                                style="text-decoration: none; color: inherit"
+                                >MASTODON</a
                             >
-                        </li>
-                        <li>
-                            <a href="mailto:info@leandroaguirre.com.ar"
-                                >Email</a
-                            >
-                        </li>
-                    </ul>
-                </section>
+                        </div>
+                    </section>
+                </div>
+            </main>
 
-                <footer>
-                    <p>
-                        LOCATION: Buenos Aires, AR | STATUS: ACTIVE | FREQUENCY:
-                        440Hz
-                    </p>
-                </footer>
-            </div>
-        </main>
+            <aside class="side-panel">
+                <div
+                    style="
+                        border-bottom: 1px solid;
+                        padding-bottom: 5px;
+                        margin-bottom: 10px;
+                    "
+                >
+                    CORE_DUMP
+                </div>
+                <div id="random-logs-right"></div>
+            </aside>
+
+            <footer>
+                <div>NODE: BA_AR_01 // LATENCY: <span id="lat">14</span>ms</div>
+                <div style="font-family: var(--f-terminal); opacity: 0.8">
+                    AUTHENTICATED: AGUIRRE_L // CLASSIFIED CONTENT
+                </div>
+                <div>[LINK_ACTIVE]</div>
+            </footer>
+        </div>
 
         <script>
-            // --- DATOS DE PROYECTOS (LAB) ---
-            const projects = {
+            const records = {
                 perfil: {
-                    desc: "REGISTRO #LA-1970 — CONSULTA ACTIVA\n\nClasificación: Perfil Cultural / Operativo Mixto\n\nEl sujeto L. Aguirre figura en el sistema desde 1970. Habilidades múltiples. Formación rastreable en ingeniería de sistemas y ciencias de la computación, posteriormente derivada hacia letras y artes escénicas. Patrón autodidacta confirmado. Se mueve entre disciplinas sin dejar huella fija.\n\nHabilidades documentadas: gestión y management artístico, producción ejecutiva, dirección de sesiones de música en vivo, programación cultural, fotografía, crítica cinematográfica, comunicación institucional, desarrollo de software, experimentación con inteligencia artificial.\n\nActividad registrada: ha operado como nodo central en redes de música, cine y teatro con ramificaciones en Argentina, Uruguay y Brasil. Historial de trabajo con artistas, compañías escénicas y organismos públicos. Presencia confirmada en espacios de alta circulación cultural.\n\nUbicación actual: activo desde 2016 en infraestructura de cultura pública nacional. Últimas coordenadas: área de video, Palacio Libertad, Buenos Aires.\n\nProcesos en segundo plano: inteligencia artificial, desarrollo de software, creación digital. No duermen cuando el sistema duerme.\n\nObservaciones del analista: sujeto no clasificable en categoría única. Interfaz humano-máquina con orientación cultural. Considerar perfil de alto rango de adaptabilidad.\n\n— FIN DE CONSULTA —",
+                    text: "REGISTRO #LA-1970 — CONSULTA ACTIVA\n\nClasificación: Perfil Cultural / Operativo Mixto\n\nSujeto L. Aguirre activo desde 1970. Formación en ingeniería de sistemas transmutada hacia letras y artes escénicas. Patrón autodidacta confirmado.\n\nHABILIDADES: Gestión y management artístico, producción ejecutiva, programación cultural, fotografía, desarrollo de software e inteligencia artificial.\n\nESTADO ACTUAL: Activo desde 2016 en infraestructura de cultura pública nacional (Palacio Libertad, Buenos Aires).\n\nOBSERVACIONES: Interfaz humano-máquina con orientación cultural de alto rango de adaptabilidad.",
                     link: null,
                 },
                 soul48: {
-                    desc: "Soul 48 es un motor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas de bajo nivel. Enfoque en eficiencia y estética terminal.",
+                    text: "EXPERIMENTO: SOUL_48\nMotor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas. Foco en eficiencia radical y estética terminal.",
                     link: "https://github.com/narquileerrado/soul48",
                 },
                 automata: {
-                    desc: "Exploración visual de autómatas celulares. Un estudio sobre cómo reglas simples aplicadas localmente generan estructuras complejas y comportamientos aparentemente inteligentes.",
+                    text: "ESTUDIO: CA_VISUALS\nExploración de autómatas celulares y generación de complejidad a partir de reglas locales simples.",
                     link: "https://narquileerrado.github.io/automatas-celulares/",
                 },
                 bandada: {
-                    desc: "Simulación de bandadas (Boids). Implementación de reglas de separación, alineación y cohesión para replicar el movimiento orgánico de aves o peces en un entorno digital.",
+                    text: "SIMULACIÓN: BOIDS\nImplementación de reglas de comportamiento emergente para replicar el movimiento de bandadas orgánicas.",
                     link: "https://narquileerrado.github.io/bandada/",
                 },
                 atractores: {
-                    desc: "Viaje al corazón del caos. Visualización de atractores extraños (como Lorenz o Rossler) donde pequeñas variaciones en las condiciones iniciales producen resultados infinitamente diversos.",
+                    text: "VISUALIZACIÓN: CHAOS_CORE\nSistemas dinámicos no lineales y atractores extraños. El orden dentro del caos.",
                     link: "https://narquileerrado.github.io/atractores/",
                 },
             };
 
-            // --- REVELAR CONTENIDO ---
+            const bootLines = [
+                "DECK OS v4.11.0 boot...",
+                "Loading sensory_filters...",
+                "SVG Displacement Map initialized",
+                "Checking local node: BA_AR_01... OK",
+                "Decrypting IDENTITY_CORE...",
+                "Establishing link...",
+                "SUCCESS.",
+            ];
+
+            const bootScreen = document.getElementById("boot-screen");
+            const cyberdeck = document.getElementById("cyberdeck");
+
+            async function runBoot() {
+                for (let line of bootLines) {
+                    let p = document.createElement("p");
+                    p.textContent = `> ${line}`;
+                    bootScreen.appendChild(p);
+                    await new Promise((r) =>
+                        setTimeout(r, 120 + Math.random() * 200),
+                    );
+                }
+                setTimeout(() => {
+                    bootScreen.style.opacity = "0";
+                    setTimeout(() => {
+                        bootScreen.style.display = "none";
+                        cyberdeck.style.display = "grid";
+                    }, 400);
+                }, 600);
+            }
+
             let revealed = false;
             function forceReveal() {
-                if (revealed) return;
-
-                // Mostramos el resto de la página
-                const extra = document.getElementById("extra-content");
-                extra.style.display = "block";
-                setTimeout(() => {
-                    extra.style.opacity = "1";
-                    document.body.style.overflowY = "auto";
-                }, 10);
-
+                if (revealed || cyberdeck.style.display === "none") return;
+                document.getElementById("interaction-prompt").style.display =
+                    "none";
+                document.getElementById("extra-content").style.display =
+                    "block";
                 revealed = true;
+                triggerGlitch();
             }
 
-            // --- MOSTRAR DETALLE DE PROYECTO ---
-            function showProject(id) {
-                const detail = document.getElementById("project-detail");
-                const desc = document.getElementById("project-desc");
-                const link = document.getElementById("project-link");
-
-                const p = projects[id];
-                desc.innerText = p.desc;
-                desc.style.whiteSpace = "pre-wrap"; // Preservar saltos de línea
-
-                if (p.link) {
-                    link.href = p.link;
-                    link.style.display = "inline-block";
-                } else {
-                    link.style.display = "none";
-                }
-
-                detail.style.display = "block";
-
-                // Scroll suave hacia el detalle
-                detail.scrollIntoView({ behavior: "smooth" });
-
-                // Efecto de 'glitch' visual al cambiar de proyecto
-                detail.style.opacity = "0.5";
-                setTimeout(() => (detail.style.opacity = "1"), 50);
+            function openDetail(key) {
+                const view = document.getElementById("detail-view");
+                const content = document.getElementById("record-content");
+                const links = document.getElementById("link-container");
+                const r = records[key];
+                content.innerText = r.text;
+                links.innerHTML = r.link
+                    ? `<a href="${r.link}" target="_blank" style="color: var(--p-amber); border: 1px solid; padding: 10px 20px; text-decoration:none;">EXECUTE_LINK [EXTERNAL]</a>`
+                    : "";
+                view.style.display = "block";
+                view.scrollIntoView({ behavior: "smooth" });
+                triggerGlitch();
             }
 
-            // Sistema listo
+            const feDisp = document.getElementById("fe-disp");
+            const glitchAnim = document.getElementById("glitch-anim");
+
+            function triggerGlitch() {
+                feDisp.setAttribute("scale", "30");
+                glitchAnim.beginElement();
+                setTimeout(() => feDisp.setAttribute("scale", "0"), 180);
+            }
+
+            function addLogs(id) {
+                const container = document.getElementById(id);
+                const items = [
+                    "BUFFER",
+                    "SCAN",
+                    "LINK",
+                    "DUMP",
+                    "SYNC",
+                    "LOAD",
+                    "AUTH",
+                ];
+                setInterval(
+                    () => {
+                        if (!revealed) return;
+                        let d = document.createElement("div");
+                        d.className = "log-line";
+                        d.textContent = `${new Date().getTime().toString(16).substr(-6)}: ${items[Math.floor(Math.random() * items.length)]}_${Math.random().toString(36).substr(2, 4)}`;
+                        container.prepend(d);
+                        if (container.children.length > 20)
+                            container.lastChild.remove();
+                    },
+                    1000 + Math.random() * 2000,
+                );
+            }
+
             window.onload = () => {
-                console.log("SYSTEM READY.");
+                runBoot();
+                addLogs("random-logs-left");
+                addLogs("random-logs-right");
+                setInterval(() => {
+                    document.getElementById("lat").textContent =
+                        10 + Math.floor(Math.random() * 10);
+                }, 4000);
             };
         </script>
     </body>

@@ -209,8 +209,8 @@
 
             /* --- GLITCH EFFECTS --- */
 
-            .glitch-text {
-                transition: color 0.1s;
+            .glitch-word {
+                transition: color 0.2s;
             }
 
             .glitch-active {
@@ -462,7 +462,7 @@
                             () => {
                                 randomWord.classList.remove("glitch-active");
                             },
-                            50 + Math.random() * 200,
+                            200 + Math.random() * 600,
                         );
                     }
                 }, 500);

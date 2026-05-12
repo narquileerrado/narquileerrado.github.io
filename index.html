@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>L. AGUIRRE // OPERATIVE INTERFACE</title>
+        <title>L. AGUIRRE // BBS_CORE</title>
 
         <!-- SEO & LLM OPTIMIZATION -->
         <meta
@@ -33,22 +33,17 @@
 
         <style>
             /* --- CONFIGURACIÓN BASE Y VARIABLES --- */
-            @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap");
+            @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
 
             :root {
-                /* Paleta Ultra-Desaturada (Fósforo Envejecido) */
-                --p-green: #9fb39f;
-                --p-amber: #b3a086;
-                --p-cyan: #8ea7a7;
-                --p-red: #a38989;
-                --p-bg: #08090a;
-
-                /* Opacidades para capas */
-                --p-green-low: rgba(159, 179, 159, 0.1);
-                --p-amber-low: rgba(179, 160, 134, 0.1);
+                /* Paleta Amber Futurista / Austera */
+                --p-amber: #ffb000;
+                --p-amber-dim: #805800;
+                --p-amber-bright: #ffcc00;
+                --p-bg: #0a0800;
+                --p-glitch: #ffffff;
 
                 --f-main: "Share Tech Mono", monospace;
-                --f-terminal: "VT323", monospace;
             }
 
             * {
@@ -59,626 +54,428 @@
 
             body {
                 background-color: var(--p-bg);
-                color: var(--p-green);
+                color: var(--p-amber);
                 font-family: var(--f-main);
-                overflow: hidden;
                 height: 100vh;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                perspective: 1000px;
-            }
-
-            /* --- FILTROS Y CAPAS ANALÓGICAS --- */
-
-            .noise::before {
-                content: "";
-                position: fixed;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-                opacity: 0.05;
-                z-index: 10000;
-                pointer-events: none;
-                animation: noise-anim 0.2s infinite;
-            }
-
-            @keyframes noise-anim {
-                0% {
-                    transform: translate(0, 0);
-                }
-                10% {
-                    transform: translate(-1%, -1%);
-                }
-                20% {
-                    transform: translate(1%, 1%);
-                }
-                30% {
-                    transform: translate(-2%, 1%);
-                }
-                40% {
-                    transform: translate(1%, -2%);
-                }
-                100% {
-                    transform: translate(0, 0);
-                }
-            }
-
-            .scanlines::after {
-                content: "";
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background:
-                    linear-gradient(
-                        rgba(18, 16, 16, 0) 50%,
-                        rgba(0, 0, 0, 0.1) 50%
-                    ),
-                    linear-gradient(
-                        90deg,
-                        rgba(255, 0, 0, 0.02),
-                        rgba(0, 255, 0, 0.01),
-                        rgba(0, 0, 255, 0.02)
-                    );
-                background-size:
-                    100% 4px,
-                    3px 100%;
-                z-index: 9999;
-                pointer-events: none;
-            }
-
-            .crt-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: radial-gradient(
-                    circle,
-                    transparent 50%,
-                    rgba(0, 0, 0, 0.5) 100%
-                );
-                pointer-events: none;
-                z-index: 9998;
-            }
-
-            /* --- LAYOUT ADAPTATIVO (CYBERDECK) --- */
-
-            #cyberdeck {
-                width: 95vw;
-                height: 90vh;
-                display: grid;
-                grid-template-columns: 200px 1fr 200px;
-                grid-template-rows: auto 1fr auto;
-                gap: 15px;
-                padding: 15px;
-                filter: url(#glitch-filter);
-                transition: transform 0.5s
-                    cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                transform: scale(1.02) rotateX(1deg);
-            }
-
-            .side-panel {
-                border: 1px solid var(--p-green-low);
-                padding: 15px;
-                font-size: 0.75rem;
-                display: flex;
                 flex-direction: column;
-                gap: 12px;
-                overflow: hidden;
-                background: rgba(0, 0, 0, 0.2);
-                color: var(--p-amber);
+                padding: 2rem;
+                overflow-x: hidden;
+                line-height: 1.4;
             }
 
-            .side-panel .log-line {
-                opacity: 0.5;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                font-family: var(--f-terminal);
-            }
-
-            #main-monitor {
-                grid-column: 2;
-                grid-row: 1 / span 2;
-                border: 1px solid var(--p-green);
-                background: rgba(159, 179, 159, 0.03);
-                padding: 2.5rem;
-                position: relative;
-                overflow-y: auto;
-                scrollbar-width: thin;
-                scrollbar-color: var(--p-green) transparent;
-            }
+            /* --- ELEMENTOS DE INTERFAZ --- */
 
             header {
+                margin-bottom: 3rem;
+                border-bottom: 1px solid var(--p-amber-dim);
+                padding-bottom: 1rem;
                 display: flex;
-                align-items: center;
-                gap: 2.5rem;
-                margin-bottom: 3.5rem;
-                border-bottom: 1px solid var(--p-green-low);
-                padding-bottom: 2rem;
-            }
-
-            .photo-frame {
-                width: 140px;
-                height: 140px;
-                border: 1px solid var(--p-amber);
-                padding: 6px;
-                background: rgba(179, 160, 134, 0.05);
-                flex-shrink: 0;
-            }
-
-            .photo-frame img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                filter: grayscale(1) contrast(1.1) brightness(0.7);
-                mix-blend-mode: lighten;
+                justify-content: space-between;
+                align-items: flex-end;
             }
 
             .ascii-logo {
-                font-size: clamp(3px, 0.9vw, 9px);
+                font-size: clamp(4px, 1vw, 10px);
                 line-height: 1.1;
-                color: var(--p-amber);
                 white-space: pre;
                 user-select: none;
-                opacity: 0.9;
+                color: var(--p-amber-bright);
             }
 
-            /* --- SECCIONES E INTERACCIÓN --- */
+            .system-status {
+                font-size: 0.75rem;
+                text-align: right;
+                color: var(--p-amber-dim);
+            }
 
-            .section-title {
-                color: var(--p-cyan);
-                font-size: 0.85rem;
-                letter-spacing: 3px;
+            main {
+                flex-grow: 1;
+                max-width: 900px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            section {
+                margin-bottom: 3rem;
+            }
+
+            h2 {
+                font-size: 0.9rem;
+                letter-spacing: 2px;
                 text-transform: uppercase;
-                margin: 2.5rem 0 1.5rem;
+                margin-bottom: 1.5rem;
+                color: var(--p-amber-dim);
                 display: flex;
                 align-items: center;
-                gap: 15px;
+                gap: 10px;
             }
 
-            .section-title::after {
-                content: "";
-                height: 1px;
-                background: var(--p-cyan);
-                flex-grow: 1;
-                opacity: 0.3;
+            h2::before {
+                content: "[";
+            }
+            h2::after {
+                content: "]";
             }
 
-            .lab-grid {
+            /* --- BBS LISTS --- */
+
+            .node-list {
+                list-style: none;
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
             }
 
-            .lab-card {
-                border: 1px solid var(--p-green-low);
-                padding: 12px;
+            .node-item {
+                border-left: 2px solid var(--p-amber-dim);
+                padding-left: 1rem;
+                transition: all 0.2s;
                 cursor: pointer;
-                transition: all 0.25s;
-                font-size: 0.95rem;
-                background: rgba(0, 0, 0, 0.4);
-                text-align: center;
-                text-transform: uppercase;
             }
 
-            .lab-card:hover {
-                border-color: var(--p-green);
-                background: var(--p-green-low);
-                transform: translateY(-2px);
+            .node-item:hover {
+                border-left-color: var(--p-amber-bright);
+                background: rgba(255, 176, 0, 0.05);
             }
+
+            .node-title {
+                display: block;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 1.1rem;
+            }
+
+            .node-desc {
+                font-size: 0.8rem;
+                color: var(--p-amber-dim);
+            }
+
+            /* --- DETAIL VIEW --- */
 
             #detail-view {
-                margin-top: 2.5rem;
-                padding: 2rem;
-                border: 1px solid var(--p-amber);
-                background: rgba(179, 160, 134, 0.05);
+                border: 1px solid var(--p-amber-dim);
+                padding: 1.5rem;
+                margin-top: 2rem;
                 display: none;
-                animation: glitch-in 0.4s ease-out;
+                background: rgba(0, 0, 0, 0.4);
             }
 
-            @keyframes glitch-in {
-                0% {
-                    opacity: 0;
-                    transform: skewX(10deg);
-                }
-                50% {
-                    opacity: 0.5;
-                    transform: skewX(-5deg);
-                }
-                100% {
-                    opacity: 1;
-                    transform: skewX(0);
-                }
+            .detail-header {
+                font-size: 0.8rem;
+                border-bottom: 1px solid var(--p-amber-dim);
+                padding-bottom: 0.5rem;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: space-between;
             }
 
-            .record-text {
-                font-family: var(--f-terminal);
-                font-size: 1.2rem;
-                color: var(--p-amber);
-                line-height: 1.5;
+            .detail-content {
+                font-size: 1rem;
                 white-space: pre-wrap;
             }
 
+            .detail-links {
+                margin-top: 1.5rem;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                border: 1px solid var(--p-amber);
+                color: var(--p-amber);
+                text-decoration: none;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                transition: all 0.2s;
+            }
+
+            .btn:hover {
+                background: var(--p-amber);
+                color: var(--p-bg);
+            }
+
+            /* --- FOOTER --- */
+
             footer {
-                grid-column: 1 / -1;
-                padding: 12px 20px;
-                border-top: 1px solid var(--p-green-low);
-                font-size: 0.7rem;
+                margin-top: 2rem;
+                border-top: 1px solid var(--p-amber-dim);
+                padding-top: 1rem;
                 display: flex;
                 justify-content: space-between;
-                color: var(--p-cyan);
-                opacity: 0.7;
+                font-size: 0.7rem;
+                color: var(--p-amber-dim);
             }
 
-            /* --- RESPONSIVE (MOBILE MINIMALISM) --- */
+            /* --- GLITCH EFFECTS --- */
 
-            @media (max-width: 1000px) {
-                #cyberdeck {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: 1fr auto;
-                    width: 100vw;
-                    height: 100vh;
-                    padding: 20px;
+            .glitch-text {
+                transition: color 0.1s;
+            }
+
+            .glitch-active {
+                color: var(--p-glitch) !important;
+                text-shadow: 0 0 5px var(--p-glitch);
+            }
+
+            /* --- RESPONSIVE --- */
+
+            @media (max-width: 600px) {
+                body {
+                    padding: 1rem;
                 }
-
-                .side-panel {
-                    display: none;
-                }
-
-                #main-monitor {
-                    grid-column: 1;
-                    border: none;
-                    padding: 0;
-                }
-
                 header {
                     flex-direction: column;
-                    align-items: center;
-                    gap: 1.5rem;
-                    text-align: center;
-                    margin-bottom: 2.5rem;
+                    align-items: flex-start;
+                    gap: 1rem;
                 }
-
-                .ascii-logo {
-                    font-size: 4px;
+                .system-status {
+                    text-align: left;
                 }
-                .photo-frame {
-                    width: 110px;
-                    height: 110px;
-                }
-                .lab-grid {
-                    grid-template-columns: 1fr 1fr;
+                .node-list {
+                    grid-template-columns: 1fr;
                 }
             }
 
-            #boot-screen {
+            #boot-overlay {
                 position: fixed;
                 inset: 0;
                 background: var(--p-bg);
-                z-index: 20000;
-                padding: 15% 10%;
-                font-family: var(--f-terminal);
-                font-size: 1.2rem;
-                color: var(--p-green);
+                z-index: 1000;
+                padding: 2rem;
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
-                overflow: hidden;
+                gap: 5px;
+            }
+
+            .boot-line {
+                font-size: 0.9rem;
             }
         </style>
     </head>
-    <body
-        class="noise scanlines"
-        onclick="forceReveal()"
-        onkeydown="forceReveal()"
-    >
-        <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
-            <filter id="glitch-filter">
-                <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.00001"
-                    numOctaves="1"
-                    result="noise"
-                    id="fe-turb"
-                >
-                    <animate
-                        id="glitch-anim"
-                        attributeName="baseFrequency"
-                        dur="0.1s"
-                        values="0.00001;0.05;0.00001"
-                        repeatCount="indefinite"
-                        begin="indefinite"
-                    />
-                </feTurbulence>
-                <feDisplacementMap
-                    in="SourceGraphic"
-                    in2="noise"
-                    scale="0"
-                    id="fe-disp"
-                />
-            </filter>
-        </svg>
+    <body onclick="interact()">
+        <div id="boot-overlay"></div>
 
-        <div class="crt-overlay"></div>
-
-        <div id="boot-screen"></div>
-
-        <div id="cyberdeck" style="display: none">
-            <aside class="side-panel">
-                <div
-                    style="
-                        border-bottom: 1px solid;
-                        padding-bottom: 5px;
-                        margin-bottom: 10px;
-                    "
-                >
-                    SIGNAL_MONITOR
-                </div>
-                <div id="random-logs-left"></div>
-            </aside>
-
-            <main id="main-monitor">
-                <header>
-                    <div class="photo-frame">
-                        <img
-                            src="https://raw.githubusercontent.com/narquileerrado/narquileerrado.github.io/main/8c615d42-f1ed-422b-9b9d-2f3026d95162.png"
-                            alt="L. Aguirre"
-                        />
-                    </div>
-                    <pre
-                        class="ascii-logo"
-                        role="img"
-                        aria-label="Leandro Aguirre"
-                    >
+        <header>
+            <pre class="ascii-logo" role="img" aria-label="Leandro Aguirre">
 ░█░░░█▀▀░█▀█░█▀█░█▀▄░█▀▄░█▀█░░░█▀█░█▀▀░█░█░▀█▀░█▀▄░█▀▄░█▀▀
 ░█░░░█▀▀░█▀█░█░█░█░█░█▀▄░█░█░░░█▀█░█░█░█░█░░█░░█▀▄░█▀▄░█▀▀
 ░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀░░▀░▀░▀▀▀░░░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀▀
-                </pre
-                    >
-                </header>
+            </pre>
+            <div class="system-status">
+                <div>SYSTEM: BBS_CORE_V5</div>
+                <div>NODE: BA_AR_01</div>
+                <div>STATUS: ONLINE</div>
+            </div>
+        </header>
 
-                <div
-                    id="interaction-prompt"
-                    style="
-                        margin: 4rem 0;
-                        text-align: center;
-                        border: 1px dashed var(--p-green-low);
-                        padding: 2rem;
-                    "
-                >
-                    [SYSTEM READY. INTERACT TO ESTABLISH LINK]
-                </div>
+        <main>
+            <section id="welcome-section">
+                <p>BIENVENIDO A LA INTERFAZ DE RED DE LEANDRO AGUIRRE.</p>
+                <p>OPERATIVO CULTURAL // INGENIERO DE SOFTWARE</p>
+            </section>
 
-                <div id="extra-content" style="display: none">
-                    <nav>
-                        <h2 class="section-title">Laboratorio // Registros</h2>
-                        <div class="lab-grid">
-                            <div
-                                class="lab-card"
-                                onclick="openDetail('perfil')"
-                                style="color: var(--p-amber)"
-                            >
-                                IDENTITY_REC
-                            </div>
-                            <div
-                                class="lab-card"
-                                onclick="openDetail('soul48')"
-                            >
-                                SOUL_48_ENG
-                            </div>
-                            <div
-                                class="lab-card"
-                                onclick="openDetail('automata')"
-                            >
-                                CA_EXPERIMENT
-                            </div>
-                            <div
-                                class="lab-card"
-                                onclick="openDetail('bandada')"
-                            >
-                                FLOCK_SIM
-                            </div>
-                            <div
-                                class="lab-card"
-                                onclick="openDetail('atractores')"
-                            >
-                                CHAOS_VIS
-                            </div>
-                        </div>
-                    </nav>
-
-                    <div id="detail-view">
-                        <div class="record-text" id="record-content"></div>
-                        <div id="link-container" style="margin-top: 2rem"></div>
+            <section>
+                <h2>Laboratorio // Registros</h2>
+                <div class="node-list">
+                    <div class="node-item" onclick="openDetail('perfil')">
+                        <span class="node-title glitch-word">IDENTITY_REC</span>
+                        <span class="node-desc"
+                            >Perfil operativo y formación cultural.</span
+                        >
                     </div>
-
-                    <section>
-                        <h2 class="section-title">Nodos de Red // Enlaces</h2>
-                        <div class="lab-grid">
-                            <a
-                                href="https://github.com/narquileerrado"
-                                target="_blank"
-                                class="lab-card"
-                                style="text-decoration: none; color: inherit"
-                                >GITHUB</a
-                            >
-                            <a
-                                href="https://www.youtube.com/@LeandroAguirre"
-                                target="_blank"
-                                class="lab-card"
-                                style="text-decoration: none; color: inherit"
-                                >YOUTUBE</a
-                            >
-                            <a
-                                href="https://www.instagram.com/l_d_Aguirre"
-                                target="_blank"
-                                class="lab-card"
-                                style="text-decoration: none; color: inherit"
-                                >INSTAGRAM</a
-                            >
-                            <a
-                                href="https://mastodon.social/@narguileerrado"
-                                target="_blank"
-                                rel="me"
-                                class="lab-card"
-                                style="text-decoration: none; color: inherit"
-                                >MASTODON</a
-                            >
-                        </div>
-                    </section>
+                    <div class="node-item" onclick="openDetail('soul48')">
+                        <span class="node-title glitch-word">SOUL_48_ENG</span>
+                        <span class="node-desc"
+                            >Motor minimalista en Rust.</span
+                        >
+                    </div>
+                    <div class="node-item" onclick="openDetail('automata')">
+                        <span class="node-title glitch-word"
+                            >CA_EXPERIMENT</span
+                        >
+                        <span class="node-desc"
+                            >Exploración de autómatas celulares.</span
+                        >
+                    </div>
+                    <div class="node-item" onclick="openDetail('bandada')">
+                        <span class="node-title glitch-word">FLOCK_SIM</span>
+                        <span class="node-desc"
+                            >Simulación de comportamiento emergente.</span
+                        >
+                    </div>
+                    <div class="node-item" onclick="openDetail('atractores')">
+                        <span class="node-title glitch-word">CHAOS_VIS</span>
+                        <span class="node-desc"
+                            >Sistemas dinámicos y atractores.</span
+                        >
+                    </div>
                 </div>
-            </main>
+            </section>
 
-            <aside class="side-panel">
-                <div
-                    style="
-                        border-bottom: 1px solid;
-                        padding-bottom: 5px;
-                        margin-bottom: 10px;
-                    "
-                >
-                    CORE_DUMP
+            <div id="detail-view">
+                <div class="detail-header">
+                    <span id="detail-id">FILE: NULL</span>
+                    <span>ACCESS_LEVEL: 3</span>
                 </div>
-                <div id="random-logs-right"></div>
-            </aside>
+                <div class="detail-content" id="detail-content"></div>
+                <div class="detail-links" id="detail-links"></div>
+            </div>
 
-            <footer>
-                <div>NODE: BA_AR_01 // LATENCY: <span id="lat">14</span>ms</div>
-                <div style="font-family: var(--f-terminal); opacity: 0.8">
-                    AUTHENTICATED: AGUIRRE_L // CLASSIFIED CONTENT
+            <section style="margin-top: 4rem">
+                <h2>Nodos de Red // Enlaces</h2>
+                <div class="node-list">
+                    <a
+                        href="https://github.com/narquileerrado"
+                        target="_blank"
+                        class="node-item"
+                        style="text-decoration: none; color: inherit"
+                    >
+                        <span class="node-title glitch-word">GITHUB</span>
+                        <span class="node-desc"
+                            >Repositorios y código fuente.</span
+                        >
+                    </a>
+                    <a
+                        href="https://www.youtube.com/@LeandroAguirre"
+                        target="_blank"
+                        class="node-item"
+                        style="text-decoration: none; color: inherit"
+                    >
+                        <span class="node-title glitch-word">YOUTUBE</span>
+                        <span class="node-desc">Registros audiovisuales.</span>
+                    </a>
+                    <a
+                        href="https://www.instagram.com/l_d_Aguirre"
+                        target="_blank"
+                        class="node-item"
+                        style="text-decoration: none; color: inherit"
+                    >
+                        <span class="node-title glitch-word">INSTAGRAM</span>
+                        <span class="node-desc">Bitácora visual.</span>
+                    </a>
+                    <a
+                        href="https://mastodon.social/@narguileerrado"
+                        target="_blank"
+                        rel="me"
+                        class="node-item"
+                        style="text-decoration: none; color: inherit"
+                    >
+                        <span class="node-title glitch-word">MASTODON</span>
+                        <span class="node-desc">Microblogging federado.</span>
+                    </a>
                 </div>
-                <div>[LINK_ACTIVE]</div>
-            </footer>
-        </div>
+            </section>
+        </main>
+
+        <footer>
+            <div>[IP: 192.168.0.1]</div>
+            <div>ESTABLISHED_LINK // 2026</div>
+            <div>LATENCY: <span id="lat">14</span>ms</div>
+        </footer>
 
         <script>
             const records = {
                 perfil: {
+                    id: "IDENTITY_REC",
                     text: "REGISTRO #LA-1970 — CONSULTA ACTIVA\n\nClasificación: Perfil Cultural / Operativo Mixto\n\nSujeto L. Aguirre activo desde 1970. Formación en ingeniería de sistemas transmutada hacia letras y artes escénicas. Patrón autodidacta confirmado.\n\nHABILIDADES: Gestión y management artístico, producción ejecutiva, programación cultural, fotografía, desarrollo de software e inteligencia artificial.\n\nESTADO ACTUAL: Activo desde 2016 en infraestructura de cultura pública nacional (Palacio Libertad, Buenos Aires).\n\nOBSERVACIONES: Interfaz humano-máquina con orientación cultural de alto rango de adaptabilidad.",
                     link: null,
                 },
                 soul48: {
-                    text: "EXPERIMENTO: SOUL_48\nMotor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas. Foco en eficiencia radical y estética terminal.",
+                    id: "SOUL_48_ENG",
+                    text: "EXPERIMENTO: SOUL_48\n\nMotor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas. Foco en eficiencia radical y estética terminal.",
                     link: "https://github.com/narquileerrado/soul48",
                 },
                 automata: {
-                    text: "ESTUDIO: CA_VISUALS\nExploración de autómatas celulares y generación de complejidad a partir de reglas locales simples.",
+                    id: "CA_EXPERIMENT",
+                    text: "ESTUDIO: CA_VISUALS\n\nExploración de autómatas celulares y generación de complejidad a partir de reglas locales simples.",
                     link: "https://narquileerrado.github.io/automatas-celulares/",
                 },
                 bandada: {
-                    text: "SIMULACIÓN: BOIDS\nImplementación de reglas de comportamiento emergente para replicar el movimiento de bandadas orgánicas.",
+                    id: "FLOCK_SIM",
+                    text: "SIMULACIÓN: BOIDS\n\nImplementación de reglas de comportamiento emergente para replicar el movimiento de bandadas orgánicas.",
                     link: "https://narquileerrado.github.io/bandada/",
                 },
                 atractores: {
-                    text: "VISUALIZACIÓN: CHAOS_CORE\nSistemas dinámicos no lineales y atractores extraños. El orden dentro del caos.",
+                    id: "CHAOS_VIS",
+                    text: "VISUALIZACIÓN: CHAOS_CORE\n\nSistemas dinámicos no lineales y atractores extraños. El orden dentro del caos.",
                     link: "https://narquileerrado.github.io/atractores/",
                 },
             };
 
             const bootLines = [
-                "DECK OS v4.11.0 boot...",
-                "Loading sensory_filters...",
-                "SVG Displacement Map initialized",
-                "Checking local node: BA_AR_01... OK",
-                "Decrypting IDENTITY_CORE...",
-                "Establishing link...",
-                "SUCCESS.",
+                "BBS_CORE v5.0.0 init...",
+                "Memory check... OK",
+                "Establishing encrypted link... DONE",
+                "Authenticating node BA_AR_01... OK",
+                "Loading operative_interface...",
+                "Welcome, Operator.",
             ];
 
-            const bootScreen = document.getElementById("boot-screen");
-            const cyberdeck = document.getElementById("cyberdeck");
+            const bootOverlay = document.getElementById("boot-overlay");
 
             async function runBoot() {
                 for (let line of bootLines) {
                     let p = document.createElement("p");
+                    p.className = "boot-line";
                     p.textContent = `> ${line}`;
-                    bootScreen.appendChild(p);
+                    bootOverlay.appendChild(p);
                     await new Promise((r) =>
-                        setTimeout(r, 120 + Math.random() * 200),
+                        setTimeout(r, 100 + Math.random() * 150),
                     );
                 }
                 setTimeout(() => {
-                    bootScreen.style.opacity = "0";
-                    setTimeout(() => {
-                        bootScreen.style.display = "none";
-                        cyberdeck.style.display = "grid";
-                    }, 400);
-                }, 600);
-            }
-
-            let revealed = false;
-            function forceReveal() {
-                if (revealed || cyberdeck.style.display === "none") return;
-                document.getElementById("interaction-prompt").style.display =
-                    "none";
-                document.getElementById("extra-content").style.display =
-                    "block";
-                revealed = true;
-                triggerGlitch();
+                    bootOverlay.style.display = "none";
+                }, 500);
             }
 
             function openDetail(key) {
                 const view = document.getElementById("detail-view");
-                const content = document.getElementById("record-content");
-                const links = document.getElementById("link-container");
+                const content = document.getElementById("detail-content");
+                const idLabel = document.getElementById("detail-id");
+                const links = document.getElementById("detail-links");
                 const r = records[key];
+
+                idLabel.textContent = `FILE: ${r.id}`;
                 content.innerText = r.text;
                 links.innerHTML = r.link
-                    ? `<a href="${r.link}" target="_blank" style="color: var(--p-amber); border: 1px solid; padding: 10px 20px; text-decoration:none;">EXECUTE_LINK [EXTERNAL]</a>`
+                    ? `<a href="${r.link}" target="_blank" class="btn">EXECUTE_LINK [EXTERNAL]</a>`
                     : "";
+
                 view.style.display = "block";
                 view.scrollIntoView({ behavior: "smooth" });
-                triggerGlitch();
             }
 
-            const feDisp = document.getElementById("fe-disp");
-            const glitchAnim = document.getElementById("glitch-anim");
-
-            function triggerGlitch() {
-                feDisp.setAttribute("scale", "30");
-                glitchAnim.beginElement();
-                setTimeout(() => feDisp.setAttribute("scale", "0"), 180);
+            function interact() {
+                // Could be used for sounds or additional effects
             }
 
-            function addLogs(id) {
-                const container = document.getElementById(id);
-                const items = [
-                    "BUFFER",
-                    "SCAN",
-                    "LINK",
-                    "DUMP",
-                    "SYNC",
-                    "LOAD",
-                    "AUTH",
-                ];
-                setInterval(
-                    () => {
-                        if (!revealed) return;
-                        let d = document.createElement("div");
-                        d.className = "log-line";
-                        d.textContent = `${new Date().getTime().toString(16).substr(-6)}: ${items[Math.floor(Math.random() * items.length)]}_${Math.random().toString(36).substr(2, 4)}`;
-                        container.prepend(d);
-                        if (container.children.length > 20)
-                            container.lastChild.remove();
-                    },
-                    1000 + Math.random() * 2000,
-                );
+            // Word Glitch Effect
+            function initGlitch() {
+                const words = document.querySelectorAll(".glitch-word");
+
+                setInterval(() => {
+                    if (Math.random() > 0.9) {
+                        const randomWord =
+                            words[Math.floor(Math.random() * words.length)];
+                        randomWord.classList.add("glitch-active");
+                        setTimeout(
+                            () => {
+                                randomWord.classList.remove("glitch-active");
+                            },
+                            50 + Math.random() * 200,
+                        );
+                    }
+                }, 500);
             }
 
             window.onload = () => {
                 runBoot();
-                addLogs("random-logs-left");
-                addLogs("random-logs-right");
+                initGlitch();
                 setInterval(() => {
                     document.getElementById("lat").textContent =
-                        10 + Math.floor(Math.random() * 10);
-                }, 4000);
+                        10 + Math.floor(Math.random() * 15);
+                }, 3000);
             };
         </script>
     </body>

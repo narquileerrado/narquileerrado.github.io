@@ -287,7 +287,7 @@
 
         <main>
             <section id="welcome-section">
-                <p> // SXX-NAUTA//</p>
+                <p>// SXX-NAUTA//</p>
             </section>
 
             <section>
@@ -317,6 +317,12 @@
                         <span class="node-title glitch-word">FLOCK_SIM</span>
                         <span class="node-desc"
                             >Simulación de comportamiento emergente.</span
+                        >
+                    </div>
+                    <div class="node-item" onclick="openDetail('bandada3d')">
+                        <span class="node-title glitch-word">FLOCK_3D_SIM</span>
+                        <span class="node-desc"
+                            >Simulación volumétrica de enjambres.</span
                         >
                     </div>
                     <div class="node-item" onclick="openDetail('atractores')">
@@ -431,6 +437,20 @@
                         {
                             label: "GITHUB_REPO",
                             url: "https://github.com/narquileerrado/bandada",
+                        },
+                    ],
+                },
+                bandada3d: {
+                    id: "FLOCK_3D_SIM",
+                    text: "SIMULACIÓN: BOIDS_3D\n\nEvolución volumétrica del algoritmo de bandadas. Implementación en Three.js con soporte multi-especie y dinámica de agilidad basada en escala.",
+                    links: [
+                        {
+                            label: "LIVE_DEMO",
+                            url: "https://narquileerrado.github.io/bandada3d/",
+                        },
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/bandada3d",
                         },
                     ],
                 },

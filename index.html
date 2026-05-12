@@ -5,11 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>L. AGUIRRE // BBS_CORE</title>
 
-        <!-- SEO & LLM OPTIMIZATION -->
+        <!-- SEO & SOCIAL PREVIEW -->
         <meta
             name="description"
             content="Interfaz operativa de Leandro Aguirre. Perfil cultural y tecnológico. Sistemas complejos, desarrollo experimental y gestión cultural."
         />
+        <meta property="og:title" content="L. AGUIRRE // BBS_CORE" />
+        <meta
+            property="og:description"
+            content="Sistemas complejos, desarrollo experimental y gestión cultural."
+        />
+        <meta
+            property="og:image"
+            content="https://narquileerrado.github.io/og-preview.png"
+        />
+        <meta property="og:url" content="https://narquileerrado.github.io" />
+        <meta property="og:type" content="website" />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%234af626%22>📟</text></svg>"
+        />
+
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
@@ -41,7 +57,7 @@
                 --p-amber-dim: #805800;
                 --p-amber-bright: #ffcc00;
                 --p-bg: #0a0800;
-                --p-glitch: #ffffff;
+                --p-glitch: #4af626;
 
                 --f-main: "Share Tech Mono", monospace;
             }
@@ -378,27 +394,59 @@
                 perfil: {
                     id: "IDENTITY_REC",
                     text: "REGISTRO #LA-1970 — CONSULTA ACTIVA\n\nClasificación: Perfil Cultural / Operativo Mixto\n\nSujeto L. Aguirre activo desde 1970. Formación en ingeniería de sistemas transmutada hacia letras y artes escénicas. Patrón autodidacta confirmado.\n\nHABILIDADES: Gestión y management artístico, producción ejecutiva, programación cultural, fotografía, desarrollo de software e inteligencia artificial.\n\nESTADO ACTUAL: Activo desde 2016 en infraestructura de cultura pública nacional (Palacio Libertad, Buenos Aires).\n\nOBSERVACIONES: Interfaz humano-máquina con orientación cultural de alto rango de adaptabilidad.",
-                    link: null,
+                    links: [],
                 },
                 soul48: {
                     id: "SOUL_48_ENG",
                     text: "EXPERIMENTO: SOUL_48\n\nMotor/entorno minimalista desarrollado en Rust para la creación de experiencias interactivas. Foco en eficiencia radical y estética terminal.",
-                    link: "https://github.com/narquileerrado/soul48",
+                    links: [
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/soul48",
+                        },
+                    ],
                 },
                 automata: {
                     id: "CA_EXPERIMENT",
                     text: "ESTUDIO: CA_VISUALS\n\nExploración de autómatas celulares y generación de complejidad a partir de reglas locales simples.",
-                    link: "https://narquileerrado.github.io/automatas-celulares/",
+                    links: [
+                        {
+                            label: "LIVE_DEMO",
+                            url: "https://narquileerrado.github.io/automatas-celulares/",
+                        },
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/automatas-celulares",
+                        },
+                    ],
                 },
                 bandada: {
                     id: "FLOCK_SIM",
                     text: "SIMULACIÓN: BOIDS\n\nImplementación de reglas de comportamiento emergente para replicar el movimiento de bandadas orgánicas.",
-                    link: "https://narquileerrado.github.io/bandada/",
+                    links: [
+                        {
+                            label: "LIVE_DEMO",
+                            url: "https://narquileerrado.github.io/bandada/",
+                        },
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/bandada",
+                        },
+                    ],
                 },
                 atractores: {
                     id: "CHAOS_VIS",
                     text: "VISUALIZACIÓN: CHAOS_CORE\n\nSistemas dinámicos no lineales y atractores extraños. El orden dentro del caos.",
-                    link: "https://narquileerrado.github.io/atractores/",
+                    links: [
+                        {
+                            label: "LIVE_DEMO",
+                            url: "https://narquileerrado.github.io/atractores/",
+                        },
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/atractores",
+                        },
+                    ],
                 },
             };
 
@@ -437,9 +485,13 @@
 
                 idLabel.textContent = `FILE: ${r.id}`;
                 content.innerText = r.text;
-                links.innerHTML = r.link
-                    ? `<a href="${r.link}" target="_blank" class="btn">EXECUTE_LINK [EXTERNAL]</a>`
-                    : "";
+
+                links.innerHTML = (r.links || [])
+                    .map(
+                        (l) =>
+                            `<a href="${l.url}" target="_blank" class="btn" style="margin-right: 10px; margin-bottom: 10px;">EXECUTE_${l.label}</a>`,
+                    )
+                    .join("");
 
                 view.style.display = "block";
                 view.scrollIntoView({ behavior: "smooth" });

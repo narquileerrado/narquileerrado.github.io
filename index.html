@@ -331,6 +331,12 @@
                             >Sistemas dinámicos y atractores.</span
                         >
                     </div>
+                    <div class="node-item" onclick="openDetail('paneldecontrol')">
+                        <span class="node-title glitch-word">CTRL_PANEL</span>
+                        <span class="node-desc"
+                            >Dashboard TUI configurable en Rust.</span
+                        >
+                    </div>
                 </div>
             </section>
 
@@ -465,6 +471,16 @@
                         {
                             label: "GITHUB_REPO",
                             url: "https://github.com/narquileerrado/atractores",
+                        },
+                    ],
+                },
+                paneldecontrol: {
+                    id: "CTRL_PANEL",
+                    text: "HERRAMIENTA: CTRL_PANEL\n\nDashboard TUI para la terminal, escrito en Rust. Inspirado en btop. Widgets de sistema, clima, noticias RSS, cotización del dólar y Bitcoin — todo configurable desde un único config.toml.",
+                    links: [
+                        {
+                            label: "GITHUB_REPO",
+                            url: "https://github.com/narquileerrado/paneldecontrol",
                         },
                     ],
                 },
